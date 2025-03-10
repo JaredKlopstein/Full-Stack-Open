@@ -9,6 +9,14 @@ const Statistics = ({ good, neutral, bad }) => {
 
   // Calculate positive responses
   const positive = total === 0 ? 0 : good / total;
+  if (total === 0) {
+    return (
+    <div>
+      <h2>statistics</h2>
+      <p>No feedback given</p>
+    </div>
+  )
+  }
 
   return (
     <div>
