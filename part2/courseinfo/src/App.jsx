@@ -14,14 +14,20 @@ const Part = (props) => (
   </p>
 );
 
+const Total = (props) => (
+  <b>
+    Total of {props.parts.reduce((acc, part) => acc + part.exercises, 0)} exercises
+  </b>
+);
+
 const Course = (props) => (
   <>
   <Header course={props.course.name} />
   <Content parts={props.course.parts} />
+  <Total parts={props.course.parts} />
   </>
 );
 
-const Total = (props) => <p>Number of exercises {props.total}</p>;
 
 const App = () => {
   const course = {
