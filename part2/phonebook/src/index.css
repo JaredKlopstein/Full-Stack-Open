@@ -52,11 +52,6 @@ div:first-of-type > div {
     margin-bottom: 20px;
 }
 
-/* Basic styling for the numbers section */
-div:last-of-type {
-    padding: 10px;
-}
-
 .notification {
     border: 2px solid green;
     background-color: #f0f0f0;
