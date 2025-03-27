@@ -25,7 +25,24 @@ const App = () => {
       number: newNumber,
     };
     if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+      if (!confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        return;
+      }
+      const person = persons.find((p) => p.name === newName);
+      const updatedPerson = { ...person, number: newNumber };
+      personService.update(person.id, updatedPerson)
+      .then((returnedNote) => {
+        setPersons(
+          persons.map((person) => (person.id !== returnedNote.id ? person : returnedNote))
+        );
+      })
+      .catch((error) => {
+        console.error("Error updating person:", error);
+        alert(`Information of ${person.name} has already been removed from server`);
+        setPersons(persons.filter((p) => p.id !== person.id));
+      });
+      setNewName("");
+      setNewNumber("");
       return;
     }
     personService
