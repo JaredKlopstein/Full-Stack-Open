@@ -1,70 +1,76 @@
-import { useState,useEffect } from 'react'
-import Filter from './components/Filter'
-import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
-import axios from 'axios'
+import { useState, useEffect } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
+import personService from "./services/persons";
 
 const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [filter, setFilter] = useState('')
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3002/persons')
-      .then(response => {
-        setPersons(response.data)
-      })  
-  },[])
+    personService
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons)
+    })
+  }, []);
 
   const addPerson = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const personObject = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+    };
+    if (persons.some((person) => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`);
+      return;
     }
-    if(persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
-  }
+    personService
+    .create(personObject)
+    .then(returnedNote => {
+      setPersons(persons.concat(returnedNote))
+      setNewName('')
+      setNewNumber("");
+    })
+  };
 
   const handlePersonChange = (event) => {
-    setNewName(event.target.value)
-  }
+    setNewName(event.target.value);
+  };
 
   const handleNumberChange = (event) => {
-    setNewNumber(event.target.value)
-  }
+    setNewNumber(event.target.value);
+  };
 
   const handleFilterChange = (event) => {
-    setFilter(event.target.value)
-  }
+    setFilter(event.target.value);
+  };
 
-  const personsToShow = filter 
-  ? persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-  : persons
+  const personsToShow = filter
+    ? persons.filter((person) =>
+        person.name.toLowerCase().includes(filter.toLowerCase())
+      )
+    : persons;
 
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2>add a new</h2>
-      <PersonForm 
-        addPerson={addPerson} 
-        newName={newName} 
-        handlePersonChange={handlePersonChange} 
-        newNumber={newNumber} 
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handlePersonChange={handlePersonChange}
+        newNumber={newNumber}
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
       <Persons personsToShow={personsToShow} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
