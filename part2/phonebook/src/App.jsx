@@ -31,9 +31,9 @@ const App = () => {
       const person = persons.find((p) => p.name === newName);
       const updatedPerson = { ...person, number: newNumber };
       personService.update(person.id, updatedPerson)
-      .then((returnedNote) => {
+      .then((returnedPerson) => {
         setPersons(
-          persons.map((person) => (person.id !== returnedNote.id ? person : returnedNote))
+          persons.map((person) => (person.id !== returnedPerson.id ? person : returnedPerson))
         );
       })
       .catch((error) => {
@@ -47,8 +47,8 @@ const App = () => {
     }
     personService
     .create(personObject)
-    .then(returnedNote => {
-      setPersons(persons.concat(returnedNote))
+    .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber("");
     })
