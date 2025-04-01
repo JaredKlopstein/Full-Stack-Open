@@ -49,6 +49,17 @@ app.get('/api/info', (request, response) => {
       }
   }) 
 
+  app.post('/api/persons', (request, response) => {
+    const person = request.body
+    if (!person.name || !person.number) {
+        return response.status(400).json({ error: 'name or number missing' })
+      }
+    const id = Math.floor(Math.random() * 10000).toString()
+    const newPerson = { id, ...person }
+    persons = persons.concat(newPerson)
+    response.json(newPerson)
+  })
+  
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     persons = persons.filter(person => person.id !== id)
