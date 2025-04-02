@@ -1,12 +1,15 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+
 morgan.token("body", (req) => {
   return JSON.stringify(req.body);
 });
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static('dist'))
+
 // morgan('tiny') is used to log the request method, URL, status code, content length, and response time
 app.use(morgan("tiny"));
 //this morgan middleware is used to log the request method, URL, status code, content length, and response time
